@@ -1,5 +1,6 @@
 /* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap');
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 
@@ -19,7 +20,7 @@
         --brown: #b37a64;
         --bodytext: #353535;
         --icons: #6e6e6e;
-        --font-heading: "Lobster", serif;
+        --font-heading: "playfair", serif;
         --font-body: "Roboto", serif;
     }
 
@@ -27,9 +28,9 @@ body, p, span {
     font-family: var(--font-body);
 }
 
-/* h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, span {
     font-family: var(--font-heading);
-} */
+}
 
 /* First Navigation */
 
@@ -136,7 +137,7 @@ body, p, span {
 
 /* Second Navigation */
 nav {
-    background: transparent;
+    background: var(--white);
     padding: 15px 50px;
     display: flex;
     justify-content: space-between;
@@ -262,7 +263,6 @@ nav {
 /* herosection */
 
 .hero-section {
-    /* background: linear-gradient(144deg, rgba(191, 191, 204, 0.6222864145658263) 0%, rgba(179, 122, 100, 0.7539390756302521) 100%); */
     padding: 4rem 0;
     background: var(--grey);
     position: relative;
@@ -629,11 +629,7 @@ nav {
     }
   }
   
-  /* Optional: Add a subtle cooking-themed animation for the title */
-  .hero-title:hover {
-    animation: cookingWiggle 0.5s ease-in-out;
-  }
-  
+ 
   @keyframes cookingWiggle {
     0%, 100% {
       transform: rotate(0deg);
@@ -704,6 +700,8 @@ nav {
     color: var(--brown);
     cursor: pointer;
 }
+/* ///////////////////////////////////////////////////////////////// */
+
 
 
 

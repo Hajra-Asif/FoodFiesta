@@ -1,14 +1,43 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+/* Root Variables */
+
 :root {
-    --blue: #28334d;
-    --white: #ffffff;
-    --grey: #edecf3;
-    --brown: #b37a64;
-    --bodytext: #353535;
-    --icons: #6e6e6e;
-    --star: #ffd700;
+  --blue: #28334d;
+  --white: #ffffff;
+  --grey: #edecf3;
+  --brown: #b37a64;
+  --bodytext: #353535;
+  --icons: #6e6e6e;
+  --TeamHeadingColor: #ff6a00;
+  --image-height: 220px;
+  --cardParagraph:#777;
+  --HoverTextColor:#333;
+  --font-heading: "playfair", serif;
+  --font-body: "Roboto", serif;
+  --star: #ffd700;
 }
 
 
+body, p, span {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6, span {
+  font-family: var(--font-heading);
+}
 
 /* Styling for the container */
 .container {
@@ -482,7 +511,7 @@ option{
     
     /* Second Navigation */
     nav {
-    background: transparent;
+        background: var(--white);
     padding: 15px 50px;
     display: flex;
     justify-content: space-between;

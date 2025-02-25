@@ -128,7 +128,7 @@ async function fetchRecipes() {
                       <span onclick="gfg(event, 4)" class="star">★</span>
                       <span onclick="gfg(event, 5)" class="star">★</span>
                   </div>
-                   <a href="detail-page.html?id=${idMeal}" class="anchor text-decoration-none">
+                   <a href="../Html/detailLunch.html?id=${idMeal}" class="anchor text-decoration-none">
               <button class="btn-view btn-side">View Recipe</button>`;
     });
   } catch (error) {

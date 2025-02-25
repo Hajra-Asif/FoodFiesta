@@ -62,7 +62,7 @@ function renderRecipe(foodItems) {
               foodItems.id
             }"></i>
           </div>
-          <div class="recipe-badge">
+          <div class="recipe-badge recipe-dlt">
             <i class="fa-solid fa-trash text-light delete-btn" data-id="${
               foodItems.id
             }"></i>
@@ -85,9 +85,7 @@ function renderRecipe(foodItems) {
           </div>
 
 
-          <a href="detail-page.html?id=${
-            foodItems.id
-          }" class="anchor text-decoration-none">
+          <a href="./detailLunch.html?id=${foodItems.id}" class="anchor text-decoration-none">
            
             <button class="btn-view" id="btn-view">View Recipe</button>
            

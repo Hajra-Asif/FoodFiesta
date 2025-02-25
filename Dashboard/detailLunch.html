@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Fiesta</title>
+    <link rel="shortcut icon" href="../Assets/foodfiestaicon.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        :root {
+            --primary: #28334d;
+            --secondary: #4ECDC4;
+            --dark: #292F36;
+            --light: #F7FFF7;
+            --accent: #FFE66D;
+        }
+
+        :root {
+            --blue: #28334d;
+            --white: #ffffff;
+            --grey: #edecf2;
+            --brown: #b37a64;
+            --bodytext: #353535;
+            --icons: #6e6e6e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--primary);
+            padding: 2rem 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+
+        .loader span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: bounce 0.6s infinite alternate;
+        }
+
+        .loader span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loader span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .recipe-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 90vw;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .recipe-image {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .recipe-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .recipe-image::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        }
+
+        .recipe-title {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: white;
+            z-index: 1;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .recipe-details {
+            padding: 2rem;
+        }
+
+        .recipe-meta {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .recipe-meta-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .recipe-meta-item svg {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .ingredients-list {
+            list-style-type: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .ingredients-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .ingredients-list li::before {
+            content: "•";
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instructions {
+            margin-bottom: 2rem;
+            white-space: pre-line;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            outline: none;
+        }
+
+        .nav-button:hover {
+            background-color: var(--brown);
+            transform: translateY(-3px);
+            /* box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); */
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Smooth transitions between recipes */
+        .recipe-card.leaving {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .recipe-title {
+                font-size: 1.5rem;
+            }
+
+            .recipe-image {
+                height: 200px;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Food Fiesta</h1>
+        <p>Anyone can cook</p>
+    </div>
+
+    <div class="container">
+        <div id="recipes-container">
+            <div class="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="module">
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaCIQMhQI_PrAeJ-wQ5xnTUocOjEJTFeY",
+            authDomain: "borntobechef-d4ea2.firebaseapp.com",
+            projectId: "borntobechef-d4ea2",
+            storageBucket: "borntobechef-d4ea2.firebasestorage.app",
+            messagingSenderId: "331146752698",
+            appId: "1:331146752698:web:60b6d5b78f1c575eb4c883"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let recipes = []; 
+        let currentIndex = 0; 
+        let isAnimating = false; 
+
+        const fetchRecipes = async () => {
+            try {
+                console.log("Fetching recipes...");
+                const querySnapshot = await getDocs(collection(db, "recipes"));
+
+                if (querySnapshot.empty) {
+                    document.getElementById("recipes-container").innerHTML = "<p class='no-recipes'>No recipes found.</p>";
+                    return;
+                }
+
+            
+                recipes = querySnapshot.docs.map(doc => doc.data());
+                console.log("Total Recipes Loaded:", recipes.length);
+
+            
+                showRecipe(currentIndex);
+            } catch (error) {
+                console.error("Error fetching recipes:", error);
+                document.getElementById("recipes-container").innerHTML =
+                    `<div class="error-message">
+                        <h2>Oops! Something went wrong</h2>
+                        <p>We couldn't load the recipes. Please try again later.</p>
+                        <p class="error-details">${error.message}</p>
+                    </div>`;
+            }
+        };
+
+        const formatIngredients = (ingredientsString) => {
+          
+            const ingredients = ingredientsString.split(/,|\n/).filter(item => item.trim() !== '');
+            return ingredients.map(item => `<li>${item.trim()}</li>`).join('');
+        };
+
+        const showRecipe = (index) => {
+            if (recipes.length === 0 || isAnimating) return;
+
+            isAnimating = true;
+            const data = recipes[index];
+            const recipesContainer = document.getElementById("recipes-container");
+
+            // Create clock icon for prep time
+            const clockIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+
+            // Create plate icon for serving size
+            const plateIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>`;
+
+            // Add 'leaving' class to existing recipe card for fade out animation
+            const existingCard = recipesContainer.querySelector('.recipe-card');
+            if (existingCard) {
+                existingCard.classList.add('leaving');
+
+                // Wait for animation to complete before updating the content
+                setTimeout(() => {
+                    updateRecipeCard();
+                }, 500);
+            } else {
+                updateRecipeCard();
+            }
+
+            function updateRecipeCard() {
+                recipesContainer.innerHTML = `
+                    <div class="recipe-card">
+                        <div class="recipe-image">
+                            <img src="${data.imageUrl || '/api/placeholder/800/500'}" alt="${data.recipeName}">
+                            <h2 class="recipe-title">${data.recipeName}</h2>
+                        </div>
+                        <div class="recipe-details">
+                            <div class="recipe-meta">
+                                <div class="recipe-meta-item">
+                                    ${clockIcon} <span>Prep Time: ${data.prepTime || 'Not specified'}</span>
+                                </div>
+                                <div class="recipe-meta-item">
+                                    ${plateIcon} <span>Serving Size: ${data.servingSize || 'Not specified'}</span>
+                                </div>
+                            </div>
+                            
+                            <h3 class="section-title">Ingredients</h3>
+                            <ul class="ingredients-list">
+                                ${formatIngredients(data.ingredients || 'Not specified')}
+                            </ul>
+                            
+                            <h3 class="section-title">Instructions</h3>
+                            <div class="instructions">
+                                ${data.instructions || 'Not specified'}
+                            </div>
+                            
+                            <div class="navigation">
+                                <button id="prev-recipe" class="nav-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                                    Previous
+                                </button>
+                                <button id="next-recipe" class="nav-button">
+                                    Next
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Attach events to navigation buttons
+                document.getElementById("next-recipe").addEventListener("click", () => {
+                    if (!isAnimating) {
+                        currentIndex = (currentIndex + 1) % recipes.length;
+                        showRecipe(currentIndex);
+                    }
+                });
+
+                document.getElementById("prev-recipe").addEventListener("click", () => {
+                    if (!isAnimating) {
+                        currentIndex = (currentIndex - 1 + recipes.length) % recipes.length;
+                        showRecipe(currentIndex);
+                    }
+                });
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', handleKeyNavigation);
+
+                // Reset animation flag after the animation completes
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 800);
+            }
+        };
+
+        const handleKeyNavigation = (e) => {
+            if (isAnimating) return;
+
+            if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % recipes.length;
+                showRecipe(currentIndex);
+            } else if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + recipes.length) % recipes.length;
+                showRecipe(currentIndex);
+            }
+        };
+
+        // Fetch recipes when the page loads
+        window.addEventListener('DOMContentLoaded', fetchRecipes);
+    </script>
+</body>
+
+</html>

@@ -45,7 +45,7 @@ const register = async (e) => {
       lastName,
       email,
       isBlocked: false,
-      role : "admin", //
+      role : "user", //
       createdAt: serverTimestamp(),
     });
     if (user) {

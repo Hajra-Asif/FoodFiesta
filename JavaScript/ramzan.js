@@ -1,8 +1,30 @@
+// Function to show the page loader
+let showPageLoader = () => {
+    document.getElementById("page-loader").style.display = "flex";
+};
+
+// Function to hide the page loader
+let hidePageLoader = () => {
+    document.getElementById("page-loader").style.display = "none";
+};
+
+
+
+
+
+
 let fetchApi = async () => {
+
+showPageLoader()
+
     // Fetch data from the API
     let fetchh = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s');
     let jsonData = await fetchh.json();
+
+    hidePageLoader()
     return jsonData;
+
+
 }
 
 // Function to display each food item card

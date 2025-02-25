@@ -333,20 +333,6 @@ document.getElementById("closeBtn").addEventListener("click", (e) => {
     // showStatus('Popup closed');
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     document.getElementById("manageAccountBtn").addEventListener("click", () => {
-//         showStatus("Redirecting to dashboard...");
-
-//         window.location.href = "Dashboard/dashboard.html";
-//     });
-// });
-
-
-// Sign out button
-// document.getElementById('signOutBtn').addEventListener('click', () => {
-//     showStatus('Sign out clicked');
-// });
-
 
 
 // Close popup when clicking outside
@@ -359,38 +345,9 @@ document.addEventListener("click", (e) => {
     }
 });
 
-// logout modal
 
-// const modal = document.getElementById("signOutModal");
 
-// function showModal() {
-//     modal.style.display = "flex";
-// }
 
-// function hideModal() {
-//     modal.style.display = "none";
-// }
-
-// function handleSignOut() {
-//     // Add your sign out logic here
-//     console.log("Signing out...");
-//     hideModal();
-//     // Redirect or perform other actions after sign out
-// }
-
-// Close modal when clicking outside
-// modal.addEventListener("click", (e) => {
-//     if (e.target === modal) {
-//         hideModal();
-//     }
-// });
-
-// // Close modal on escape key press
-// document.addEventListener("keydown", (e) => {
-//     if (e.key === "Escape") {
-//         hideModal();
-//     }
-// });
 
 //////////////////you may also like//////////////////
 
