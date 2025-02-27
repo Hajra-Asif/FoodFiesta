@@ -13,6 +13,7 @@ body {
     /* overflow-x: hidden; */
 }
 
+
 .sidebar {
     background-color: var(--blue);
     /* background: linear-gradient(115deg, var(--blue) 80%, var(--brown) 100%); */

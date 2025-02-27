@@ -14,14 +14,19 @@ import {
   where
 } from "./firebaseconfig.js";
 
+// document.getElementById('nonee').style.display='none'
+
+
 
 
 let userId;
 let userRole;
+
 onAuthStateChanged(auth, async (user) => {
   console.log("Auth State Changed Triggered:", user);
   if (user) {
     console.log("User is logged in:", user.uid);
+   
     userId = user.uid
 
     const usersRef = collection(db, "users");
@@ -55,6 +60,7 @@ onAuthStateChanged(auth, async (user) => {
       document.getElementById("triggerText").innerHTML = user.email.slice(0, 1).toUpperCase();
       document.getElementById("authentication")?.remove();
       document.getElementById("loginmodal")?.remove();
+       document.getElementById('nonee').style.display='flex'
     } catch (error) {
       console.log(error);
 
@@ -63,6 +69,7 @@ onAuthStateChanged(auth, async (user) => {
   } else {
     console.log("User is logged out");
     document.getElementById("profileTrigger").style.display = "none";
+    document.getElementById('nonee').style.display='none'
   }
 });
 

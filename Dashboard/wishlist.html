@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Recipe Wishlist</title>
+    <style>
+        :root {
+            --blue: #28334d;
+            --white: #ffffff;
+            --grey: #edecf3;
+            --brown: #b37a64;
+            --bodytext: #353535;
+            --icons: #6e6e6e;
+            --TeamHeadingColor: #b37a64;
+            --image-height: 220px;
+            --cardParagraph:#777;
+            --HoverTextColor:#333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--grey);
+            color: var(--bodytext);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--blue);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: var(--white);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        .tab-button {
+            padding: 12px 25px;
+            background-color: var(--white);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: var(--bodytext);
+        }
+        
+        .tab-button.active {
+            background: var(--TeamHeadingColor);
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #recipeList, #wishlistContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .recipe, .wishlist-item {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .recipe:hover, .wishlist-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .recipe img, .wishlist-item img {
+            width: 100%;
+            height: var(--image-height);
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .recipe:hover img, .wishlist-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .recipe h3, .wishlist-item h3 {
+            padding: 15px;
+            font-size: 1.1rem;
+            text-align: center;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--HoverTextColor);
+        }
+        
+        .wishlist-button, .remove-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .wishlist-button {
+            background: var(--brown);
+            color: var(--white);
+        }
+        
+        .remove-button {
+            background: var(--blue);
+            color: var(--white);
+        }
+        
+        .wishlist-button:hover, .remove-button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        
+        .empty-message {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 50px;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.2rem;
+            color: var(--cardParagraph);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--TeamHeadingColor);
+            color: var(--white);
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            grid-column: 1/-1;
+            font-size: 1.2rem;
+            color: var(--icons);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tasty Recipe Collection</h1>
+            <p>Discover delicious chicken recipes and save your favorites</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-button active" data-tab="recipes">Browse Recipes</button>
+            <button class="tab-button" data-tab="wishlist">My Wishlist</button>
+        </div>
+        
+        <div id="recipes" class="tab-content active">
+            <div id="recipeList" class="recipe-grid">
+                <div class="loading">Loading recipes</div>
+            </div>
+        </div>
+        
+        <div id="wishlist" class="tab-content">
+            <div id="wishlistContainer" class="wishlist-grid">
+                <!-- Wishlist items will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        const apiURL = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=Chicken';
+        
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // If switching to wishlist tab, reload the wishlist
+                if (tabId === 'wishlist') {
+                    loadWishlist();
+                }
+            });
+        });
+        
+        // Load recipes from API
+        async function loadRecipes() {
+            const recipeList = document.getElementById("recipeList");
+            recipeList.innerHTML = '<div class="loading">Loading recipes</div>';
+            
+            try {
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                
+                if (!data.meals) {
+                    recipeList.innerHTML = '<div class="empty-message">No recipes found!</div>';
+                    return;
+                }
+                
+                recipeList.innerHTML = ""; // Clear previous content
+                
+                // Add delay for each recipe to create staggered animation
+                data.meals.forEach((meal, index) => {
+                    setTimeout(() => {
+                        const recipeDiv = document.createElement('div');
+                        recipeDiv.className = 'recipe';
+                        recipeDiv.style.animationDelay = `${index * 0.1}s`;
+                        
+                        recipeDiv.innerHTML = `
+                            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" />
+                            <h3>${meal.strMeal}</h3>
+                            <button class="wishlist-button" data-id="${meal.idMeal}" data-title="${meal.strMeal}" data-image="${meal.strMealThumb}">
+                                 Add to Wishlist
+                            </button>
+                        `;
+                        
+                        recipeList.appendChild(recipeDiv);
+                    }, index * 50); // Stagger the appearance
+                });
+                
+            } catch (error) {
+                recipeList.innerHTML = `<div class="empty-message">Error fetching recipes: ${error.message}</div>`;
+            }
+        }
+        
+        // Show notification instead of alert
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Add to wishlist when button is clicked
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("wishlist-button")) {
+                const recipeId = event.target.getAttribute("data-id");
+                const recipeData = {
+                    id: recipeId,
+                    title: event.target.getAttribute("data-title"),
+                    image: event.target.getAttribute("data-image")
+                };
+                
+                addToWishlist(recipeId, recipeData);
+            }
+        });
+        
+        function addToWishlist(recipeId, recipeData) {
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            
+            if (wishlist.some(item => item.id === recipeId)) {
+                showNotification("This recipe is already in your wishlist!");
+                return;
+            }
+            
+            wishlist.push(recipeData);
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+            
+            showNotification("Recipe added to wishlist!");
+        }
+        
+        // Load wishlist from localStorage
+        function loadWishlist() {
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            const wishlistContainer = document.getElementById("wishlistContainer");
+            
+            wishlistContainer.innerHTML = "";
+            
+            if (wishlist.length === 0) {
+                wishlistContainer.innerHTML = '<div class="empty-message">Your wishlist is empty. Add some delicious recipes!</div>';
+                return;
+            }
+            
+            // Add delay for each item to create staggered animation
+            wishlist.forEach((recipe, index) => {
+                setTimeout(() => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'wishlist-item';
+                    itemDiv.style.animationDelay = `${index * 0.1}s`;
+                    
+                    itemDiv.innerHTML = `
+                        <img src="${recipe.image}" alt="${recipe.title}" />
+                        <h3>${recipe.title}</h3>
+                        <button class="remove-button" data-id="${recipe.id}">Remove from Wishlist</button>
+                    `;
+                    
+                    wishlistContainer.appendChild(itemDiv);
+                }, index * 50); // Stagger the appearance
+            });
+        }
+        
+        // Remove from wishlist when button is clicked
+        document.addEventListener("click", function(event) {
+            if (event.target.classList.contains("remove-button")) {
+                const recipeId = event.target.getAttribute("data-id");
+                removeFromWishlist(recipeId);
+            }
+        });
+        
+        function removeFromWishlist(recipeId) {
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            
+            // Find the item to remove for animation
+            const itemToRemove = document.querySelector(`.wishlist-item button[data-id="${recipeId}"]`).parentNode;
+            
+            // Add removal animation
+            itemToRemove.style.transform = 'scale(0.8)';
+            itemToRemove.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Actually remove from localStorage
+                wishlist = wishlist.filter(item => item.id !== recipeId);
+                localStorage.setItem("wishlist", JSON.stringify(wishlist));
+                
+                showNotification("Recipe removed from wishlist!");
+                loadWishlist(); // Reload wishlist
+            }, 300);
+        }
+        
+        // Load recipes and wishlist on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            loadRecipes();
+            // Don't load wishlist initially as it's in the hidden tab
+        });
+    </script>
+</body>
+</html>
